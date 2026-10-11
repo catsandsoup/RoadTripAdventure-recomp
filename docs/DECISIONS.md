@@ -91,3 +91,11 @@ These presentation and trade choices are resolved. Save identity, safe hook/resu
 Acceptance checks: unrelated existing saves and cancelled/failed saves do not unlock edits; a new Adventure cannot inherit an old Adventure's eligibility. Verify the backup contents before enabling mutation. Copy/import must leave the source's setting intact while the destination starts off. Legacy state loading must not fail solely because cheat metadata is absent. If backup creation or verification fails, refuse the edit and explain recovery; do not mutate gameplay first.
 
 The requested persistence policies are resolved. Safe completion hooks, identity reconciliation and interruption recovery remain engineering work requiring runtime evidence.
+
+## Testing presentation preference, 11 October 2026
+
+The owner requests headless testing where possible and muted audio. Prefer existing headless regression/probe APIs. Headless mode opens no window or audio device while retaining internal audio processing for meaningful sound checks. Keep visible runs brief and muted when a player-facing check requires them; close the test instance afterward. Use isolated test saves.
+
+## Publication gate between features, 11 October 2026
+
+The owner requires each feature to pass its agreed tests and reviews, then be committed and pushed before the next feature begins. Verify the remote commit after pushing. Fix demonstrated failures in the current feature before moving on; do not batch unfinished features for later publication. Report untested boundaries and remaining uncertainty rather than describe partial evidence as flawless operation.

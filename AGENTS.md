@@ -62,6 +62,8 @@ Apply this rule to every feature, not only money cheats. Assume the proposed cha
 
 ## Verification and release
 
+Owner requires a publication gate between features: finish the current feature's agreed acceptance checks and required reviews, fix demonstrated failures, commit it, push it to the owner's fork, and verify that the remote branch contains the commit before starting implementation of the next feature. A local commit alone is insufficient. Do not batch unverified features into a later push or claim flawless behaviour from incomplete coverage. If testing, review or publication fails, stay on the current feature and report the evidence.
+
 Use `bug-tester` for regression triage, `perf-profiler` for repeatable measured performance, and `release-guard` before commits/pushes. Follow the briefs' evidence/report formats. Reconcile older branch names or test counts with the current checkout. User approval is required for changed goldens; explain mismatches rather than changing hashes to mask bugs.
 
 For this fork, adapt release-guard's identity check to **catsandsoup and its verified GitHub no-reply email**. Never impersonate silentsudin or fabricate Claude-session/coauthor trailers. Preserve existing upstream attribution. A documentation-only change needs document/link/privacy checks; a full gameplay regression and packaged-app check remain required when the affected code/release warrants them. Report unrun checks as unrun.

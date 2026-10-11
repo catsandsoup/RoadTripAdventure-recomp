@@ -27,7 +27,8 @@ The owner requires questions before implementation to eliminate confusion, assum
 3. Wait for answers before coding behaviour that depends on them. Silence does not approve a default. Continue independent read-only research while answers are pending.
 4. Record answers and acceptance examples in `docs/DECISIONS.md`, with the affected feature IDs. Flag proposed details in this plan that the owner has not confirmed; do not turn a proposed implementation into a user decision.
 5. Confirm that scope, defaults, persistence, cancellation, edge cases and completion checks are clear. If new ambiguity appears during work, ask before implementing that dependent behaviour.
-6. Implement only the clarified part, show the result and its evidence, and repeat for the next part.
+6. Implement only the clarified part and complete its agreed acceptance checks and required reviews. Resolve demonstrated failures and show the result with its evidence.
+7. Commit and push the verified feature, then confirm the owner's remote branch contains that commit before starting implementation of the next feature. A local commit or planned push does not meet this gate. Stay on the current feature if a check, review or push fails; do not claim flawless behaviour from incomplete coverage.
 
 Starting question areas, to refine after inspecting the code:
 
