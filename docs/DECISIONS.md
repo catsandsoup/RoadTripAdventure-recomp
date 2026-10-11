@@ -12,7 +12,7 @@
 
 ## Pending feature decisions
 
-No feature clarification gate has completed yet. GOALS.md's detailed behaviours are proposals unless recorded above or subsequently approved here. Setup does not mark gameplay features complete.
+The C1 clarification gate is in progress. GOALS.md's detailed behaviours are proposals unless recorded above or subsequently approved here. Setup does not mark gameplay features complete.
 
 Use this format for each clarified part:
 
@@ -29,3 +29,47 @@ Remaining questions or exclusions:
 ```
 
 Record actual answers, not inferred preferences. Link each later change and verification report to its decision entry.
+
+## C1 money cheats: first answer batch, 11 October 2026
+
+Owner answers:
+
+- Add a dedicated Cheats entry to upstream's existing custom Escape/controller menu; do not create a separate menu system.
+- Unlimited Money makes purchases free. Rewards may still change the displayed balance.
+- Money edits affect the current Adventure when the player saves, with a backup before the first edit.
+- Persist the saved balance and Unlimited Money setting per Adventure across relaunch.
+
+Pending research/clarification before dependent implementation:
+
+- Identify purchase checks and debits, supported money limits and safe mutation points from USA code/probes.
+- Resolve the scope of free spending (shops, services, bets and other costs) and affordability handling at low balance.
+- Resolve save identity/slot policy for cheat settings and automatic backup/restore, plus save-state interactions.
+- Confirm custom-amount input and cancellation flow after inspecting existing controller UI components.
+
+No gameplay implementation has begun.
+
+UI reference supplied by owner, 11 October 2026: the existing Escape menu has Resume, Options, Controllers and Quit, with a cyan panel, orange border/title tab, blue focused row, gold horn cursor, chunky outlined text, player-status band and bottom input hints. Add Cheats to this existing root menu and reuse its components. The screenshot stays local and is not committed.
+
+## C1 money cheats: second answer batch, 11 October 2026
+
+- Unlimited Money covers every payment, including betting stakes. Rewards still change the balance.
+- Require an ordinary in-game save before enabling or applying money cheats, so a recoverable backup exists.
+- Loading an older save state restores the Unlimited Money setting from that saved moment.
+
+Implementation consequences: intercept affordability checks as well as debits; pair save-state snapshots with cheat metadata; scope persisted settings to the loaded Adventure. Static research establishes a normal transaction cap of 999,999, so 99,999 is a preset rather than the game maximum. Runtime validation remains pending.
+
+## Lifecycle and adversarial verification, 11 October 2026
+
+Owner requires this rule throughout the fork: inspect how affected functions work across their lifecycle, including adjacent, prerequisite and subsequent functions; recurse through relevant dependencies and test with a failure-seeking approach. Start from the hypothesis that a change will break, and try to demonstrate that break rather than follow only a happy path.
+
+Apply to money transactions and all later features. Document examined dependencies, break hypotheses, evidence, failures, repairs, retests and unknowns. This requires substantive adversarial tests; it does not justify claiming mathematical/exhaustive proof from passing samples.
+
+## C1 money cheats: bank and betting decisions, 11 October 2026
+
+- Bank deposits and withdrawals remain normal transfers. Unlimited Money must not create bank funds by making deposits free.
+- A winning bet pays the full original payout even though the stake was free. Correct the preview to show the actual gain.
+- Owner enabled Computer access for visual verification; use an isolated test instance for gameplay validation.
+
+C1's core behaviour is now clarified. Code-level hook safety, save identity and full lifecycle coverage still require evidence; ask again if research exposes a new product choice.
+
+Remaining C1 questions after recursive research: price presentation while spending is free, and whether player-to-player part-trade payments remain conserved transfers. These newly discovered choices are pending; no dependent behaviour will be implemented before answers.

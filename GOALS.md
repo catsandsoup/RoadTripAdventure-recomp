@@ -256,6 +256,14 @@ Phase gate:
 | F2 | Remaining quality-of-life ideas | Audit upstream support for fast loading, skip logos, language selection, memory-card import/export and automatic backups. Implement verified gaps; language requires supported region/text assets, not an assumed PAL language switch in the USA game. |
 | F3 | Further platforms | Maintain upstream macOS/Windows/Android support as additions land. Research Linux/Steam Deck and browser feasibility as later ports, with build, input, storage, mod and multiplayer checks for each. |
 
+## Lifecycle and adversarial test requirement
+
+For every implementation part, investigate prerequisites, adjacent functions and downstream consumers through the complete lifecycle. Recursively trace relevant call/data dependencies and document the boundaries examined. Assume a connected behaviour will break; write failure hypotheses and attempt to reproduce those failures, then repair and retest. Successful normal use alone does not meet the feature gate.
+
+Each feature report must include a dependency map, mutation/side-effect ordering, failure/cancellation branches, persistence/reload behaviour, concrete break hypotheses, the tests/probes used, their results and untested edges. Include boundary values, repeated actions, interruptions, transitions, stale/corrupt state and concurrent activity where applicable. Preserve baseline evidence and distinguish known upstream failures from new ones.
+
+For money cheats, cover quote/price display → eligibility/affordability → inventory or service mutation → debit/credit → feedback/rewards → memory-card save and cheat sidecar → save-state snapshot/restore → quit/load/next transaction. Include wagers, refunds, losses/winnings, zero cash, upper bounds, cancelled purchases, invalid/stale Adventure state and switching saved Adventures. Validate each recursive dependency before claiming that all payments are free and rewards still work.
+
 ## Evidence and completion policy
 
 A checkbox means implementation and its checks passed in this fork. Research reports complete research tasks only; prototypes do not complete player-facing features.

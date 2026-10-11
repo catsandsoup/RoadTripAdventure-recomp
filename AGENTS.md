@@ -49,6 +49,17 @@ Preserve upstream behaviour when fork modifiers are off. Research race-count dep
 
 Use played-through routes to prove progression. Label edited-save fixtures, warps or other shortcuts as narrow probes; they do not prove an end-to-end Adventure. Test real-time play as well as deterministic/headless runs.
 
+## Lifecycle and adversarial verification: owner requirement
+
+Apply this rule to every feature, not only money cheats. Assume the proposed change breaks a connected behaviour and actively try to demonstrate that failure before accepting the design.
+
+- Trace the full lifecycle: entry/preconditions, adjacent calls/shared data, mutation ordering, callbacks/resume points, side effects, cancellation/failure, persistence, and subsequent use/reload. Recurse through relevant callers/callees and shared-state consumers; record visited paths and unresolved boundaries.
+- Build an evidence-backed dependency graph. Treat inventory, progress, UI, audio, AI, replay, save states and storage consumers as part of the change when they share affected data or invariants.
+- Write concrete break hypotheses and tests that could demonstrate each failure. Include zero/min/max/out-of-range inputs, repeat operations, interrupted/cancelled work, stale state, transitions, conflicting settings, missing/corrupt files, and concurrency where relevant. Do not settle for a single successful action.
+- Reproduce baseline failures separately. For each test, report what it exercises and what it cannot establish. A successful narrow probe does not prove the whole lifecycle.
+- Resolve demonstrated failures and retest their connected paths. Record untested edges and residual risks; do not claim exhaustive proof, and do not update goldens or weaken assertions to conceal a break.
+- Use targeted recursion with explicit boundaries and a visited-path list. Follow newly discovered dependencies until the affected invariants are understood; never substitute an unbounded test loop for a defined completion gate.
+
 ## Verification and release
 
 Use `bug-tester` for regression triage, `perf-profiler` for repeatable measured performance, and `release-guard` before commits/pushes. Follow the briefs' evidence/report formats. Reconcile older branch names or test counts with the current checkout. User approval is required for changed goldens; explain mismatches rather than changing hashes to mask bugs.
