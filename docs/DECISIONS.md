@@ -72,4 +72,22 @@ Apply to money transactions and all later features. Document examined dependenci
 
 C1's core behaviour is now clarified. Code-level hook safety, save identity and full lifecycle coverage still require evidence; ask again if research exposes a new product choice.
 
-Remaining C1 questions after recursive research: price presentation while spending is free, and whether player-to-player part-trade payments remain conserved transfers. These newly discovered choices are pending; no dependent behaviour will be implemented before answers.
+## C1 money cheats: prices and player trades, 11 October 2026
+
+- Keep original shop prices visible and add a free-payment indication while Unlimited Money is enabled.
+- For player-to-player part trades, waive the buyer's payment while crediting the seller normally. This differs from bank transfers, which remain normal.
+
+Acceptance checks: a completed trade adds the part to the buyer, removes it from the seller, leaves the enabled buyer's wallet unchanged and credits the seller exactly once at the original trade price. Cancellation and failed inventory checks must transfer neither money nor parts. Disabling Unlimited Money restores the original payment behaviour. Save/reload and save-state restoration must preserve the applicable Adventure setting without replaying a completed transfer.
+
+These presentation and trade choices are resolved. Save identity, safe hook/resume behaviour and lifecycle coverage still require investigation; record further questions if that evidence exposes a product choice.
+
+## C1 money cheats: copies, legacy states and backup scope, 11 October 2026
+
+- A copied or imported Adventure starts with Unlimited Money off on its destination card, including copies made by this game.
+- A save state created before cheats existed remains loadable and restores its original balance with Unlimited Money off.
+- Require a fresh ordinary save of current progress before the first money-cheat edit; an earlier completed save is insufficient.
+- Back up the whole selected memory card and its cheat settings before that edit.
+
+Acceptance checks: unrelated existing saves and cancelled/failed saves do not unlock edits; a new Adventure cannot inherit an old Adventure's eligibility. Verify the backup contents before enabling mutation. Copy/import must leave the source's setting intact while the destination starts off. Legacy state loading must not fail solely because cheat metadata is absent. If backup creation or verification fails, refuse the edit and explain recovery; do not mutate gameplay first.
+
+The requested persistence policies are resolved. Safe completion hooks, identity reconciliation and interruption recovery remain engineering work requiring runtime evidence.

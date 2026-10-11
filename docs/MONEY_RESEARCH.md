@@ -8,6 +8,8 @@ This is static research, not implemented cheat behaviour or a runtime test pass.
 
 See `DECISIONS.md`: dedicated Cheats entry in the existing Escape/controller menu; all spending free while Unlimited Money is enabled, including bets, with bank transfers remaining normal; rewards still affect balance; require an ordinary save before cheating and back it up before the first edit; persist balance/toggle per Adventure; save states restore the toggle from that moment.
 
+Keep original shop prices and add a free-payment indication. In player-to-player part trades, waive the enabled buyer's payment but credit the seller normally. Preserve item eligibility and cancellation; a bank transfer remains excluded.
+
 ## Verified static findings
 
 | Item | Source/evidence |
@@ -33,6 +35,22 @@ Static call tracing found a synchronous sound path from the money-adjustment rou
 Betting includes a wager ceiling based on the balance and a low-balance refusal before the final debit. Its winning payout uses wager × odds, while its preview assumes a deducted stake. The owner confirmed full payout for a free stake and an updated preview showing the actual gain.
 
 The paired debit/credit workflow near `0x0023A460` transfers value between wallet and the field at progress offset `0x330C`. Deposit/withdrawal dialogue strings corroborate bank use, but runtime entry/dispatch validation remains pending. The owner confirmed ordinary bank transfers remain charged/credited normally; they are excluded from free spending. A no-debit hook applied to deposits would violate this decision and allow deposit/withdrawal money creation.
+
+## Save lifecycle: static evidence
+
+The original game stores one Adventure progress file per memory card. Card selection and player progress-block selection are separate task arguments. No immutable Adventure identifier has been established; names, currency and content hashes cannot serve as stable identity across edits and saves.
+
+- Normal save task `0x00228708` writes auxiliary files, then progress. `0x00228A34` writes `0x3448` progress bytes. Completion branches near `0x00228AB0–0x00228AF0` distinguish success from failure; registered resume `0x00228AC4` follows the success sound. File existence alone does not prove this Adventure completed a normal save.
+- Normal load task `0x00228510` reads the selected card into the selected player's block, then transfers to completion task `0x002283E0`, which checks the read size and close result. Attach host metadata only after verified completion.
+- Runtime `MemoryCard.cpp` writes and flushes the destination directly; ordinary saving is not atomic. Snapshot card bookkeeping restores open-file positions, not card-file contents. A snapshot load therefore does not rewind an ordinary save.
+- `EeSnapshotProbe.cpp` blocks snapshot capture while a card file is open. `StateSlots.cpp` marks cards changed after loading a snapshot so the game rereads present contents.
+- `SaveState.cpp` requires every registered custom section. A new cheat section would reject old snapshots lacking it. The existing `GAME` section in `src/game/overrides.cpp` can instead use the archive's additive versioning. The owner confirmed old states should load with cheats off; implementation and runtime checks remain pending.
+
+Implementation must pair a host identity with verified load/save completion, preserve original progress bytes, verify the first-edit backup before mutating, and recover from interruption between the original save and sidecar writes. Atomic sidecar rename alone cannot guarantee a consistent pair. These are design constraints, not implemented protection.
+
+The owner requires a fresh save of current progress and a backup of the whole selected card plus its cheat settings. Copies/imports start with Unlimited Money off on the destination. Eligibility and metadata must therefore distinguish completed saves of this active Adventure from unrelated, failed or stale saves.
+
+Additional break hypotheses: an unrelated existing card makes an unsaved New Game eligible; a short/failed save establishes eligibility; renaming loses the toggle; imports inherit another Adventure's toggle; restoring Adventure A's snapshot overwrites Adventure B's metadata; a legacy snapshot becomes unloadable; an interrupted paired write loses identity or backup provenance. Probe these before accepting persistence.
 
 ## Runtime verification still required
 
